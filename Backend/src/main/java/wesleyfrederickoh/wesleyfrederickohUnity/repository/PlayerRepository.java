@@ -13,4 +13,6 @@ public interface PlayerRepository extends JpaRepository<Player, UUID> {
     Optional<Player> findByEmail(String email);
     boolean existsByUsername(String username);
     boolean existsByEmail(String email);
+    Optional<Player> findByEmailAndPassword(String email, String password);
+
 }
