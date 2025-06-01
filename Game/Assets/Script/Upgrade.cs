@@ -1,3 +1,4 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 
@@ -13,6 +14,11 @@ public class Upgrade : MonoBehaviour
 
     public Data data;
 
+    public TMP_Text buttonText;
+    public TMP_Text WarningText;
+
+    private Coroutine warningCoroutine;
+
     void Start()
     {
         if (counterManager == null)
@@ -25,12 +31,14 @@ public class Upgrade : MonoBehaviour
         clickUpgradeCostMultiplier = 1.5f;
 
         counterManager.data.OnDataChanged += UpdateUI;
+
+        WarningText.text = "";
         UpdateUI();
     }
 
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.U))
+        if (Input.GetKeyDown(KeyCode.U))
         {
             BuyUpgrade();
         }
@@ -50,6 +58,14 @@ public class Upgrade : MonoBehaviour
             counterManager.clickValue += counterManager.clickValue * 0.15f + 3;
             UpdateUI();
         }
+        else
+        {
+            if (warningCoroutine != null)
+                StopCoroutine(warningCoroutine);
+
+            warningCoroutine = StartCoroutine(ShowWarning("Not enough currency", 2f));
+            Debug.LogWarning("Not enough currency to buy click upgrade!");
+        }
     }
 
 
@@ -60,11 +76,21 @@ public class Upgrade : MonoBehaviour
 
     public void UpdateUI()
     {
-        upgradeText.text = "Upgrade Cost: " + cost().ToString("F2") + "\n" +
-                          "Click Level: " + counterManager.data.clickUpgradeLevel + "\n" +
-                          "Click Value: " + counterManager.clickValue.ToString("F2") + "\n" +
-                          "Production Cost: " + productionUpgrade.cost().ToString("F2") + "\n" +
-                          "Production Level: " + counterManager.data.passiveIncomeLevel + "\n" +
-                          "Production Rate: " + counterManager.data.passiveIncomeRate.ToString("F2");
+        buttonText.text = "Upgrade Click\n" +
+                            "Cost: " + NumberFormatter.FormatNumber(cost()) + "\n" +
+                          "Click Level: " + counterManager.data.clickUpgradeLevel + "\n";
+
+        upgradeText.text = "Currency per Click: " + NumberFormatter.FormatNumber(counterManager.clickValue) + "\n";
+    }
+    
+    private IEnumerator ShowWarning(string message, float duration)
+    {
+        WarningText.text = message;
+        WarningText.gameObject.SetActive(true);
+
+        yield return new WaitForSeconds(duration);
+
+        WarningText.text = "";
+        WarningText.gameObject.SetActive(false);
     }
 }
