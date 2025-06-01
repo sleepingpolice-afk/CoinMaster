@@ -9,6 +9,8 @@ public class Upgrade : MonoBehaviour
 
     public CounterManager counterManager;
 
+    public ProductionUpgrade productionUpgrade;
+
     public Data data;
 
     void Start()
@@ -56,10 +58,13 @@ public class Upgrade : MonoBehaviour
         return (double)(clickUpgradeBaseCost * Mathf.Pow((float)clickUpgradeCostMultiplier, counterManager.data.clickUpgradeLevel));
     }
 
-    private void UpdateUI()
+    public void UpdateUI()
     {
         upgradeText.text = "Upgrade Cost: " + cost().ToString("F2") + "\n" +
-                          "Current Level: " + counterManager.data.clickUpgradeLevel + "\n" +
-                          "Click Value: " + counterManager.clickValue.ToString("F2");
+                          "Click Level: " + counterManager.data.clickUpgradeLevel + "\n" +
+                          "Click Value: " + counterManager.clickValue.ToString("F2") + "\n" +
+                          "Production Cost: " + productionUpgrade.cost().ToString("F2") + "\n" +
+                          "Production Level: " + counterManager.data.passiveIncomeLevel + "\n" +
+                          "Production Rate: " + counterManager.data.passiveIncomeRate.ToString("F2");
     }
 }

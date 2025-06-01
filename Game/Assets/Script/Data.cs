@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 public class Data
 {
@@ -26,9 +27,65 @@ public class Data
         }
     }
 
+    private int _passiveIncomeLevel;
+    public int passiveIncomeLevel
+    {
+        get => _passiveIncomeLevel;
+        set
+        {
+            _passiveIncomeLevel = value;
+            OnDataChanged?.Invoke();
+        }
+    }
+
+    private double _passiveIncomeRate = 0;
+
+    public double passiveIncomeRate
+    {
+        get => _passiveIncomeRate;
+        set
+        {
+            if (value < 0)
+                throw new ArgumentOutOfRangeException(nameof(value), "Passive income rate cannot be negative.");
+            _passiveIncomeRate = value;
+            OnDataChanged?.Invoke();
+        }
+    }
+
+    private bool _isPassiveIncomeActive = false;
+    private float _lastPassiveIncomeTime;
+
+    public void StartPassiveIncome()
+    {
+        if (!_isPassiveIncomeActive)
+        {
+            _isPassiveIncomeActive = true;
+            _lastPassiveIncomeTime = Time.time;
+        }
+    }
+
+    public void StopPassiveIncome()
+    {
+        _isPassiveIncomeActive = false;
+    }
+
+    public void UpdatePassiveIncome()
+    {
+        if (_isPassiveIncomeActive && _passiveIncomeRate > 0)
+        {
+            float currentTime = Time.time;
+            if (currentTime - _lastPassiveIncomeTime >= 1.0f)
+            {
+                coins += _passiveIncomeRate;
+                _lastPassiveIncomeTime = currentTime;
+            }
+        }
+    }
+
     public Data()
     {
         _coins = 0;
         _clickUpgradeLevel = 0;
+        _passiveIncomeLevel = 0;
     }
 }
