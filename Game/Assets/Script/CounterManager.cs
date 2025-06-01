@@ -39,6 +39,6 @@ public class CounterManager : MonoBehaviour
 
     private void UpdateUI()
     {
-        counterText.text = "Coins: " + NumberFormatter.FormatNumber(data.coins);
+        counterText.text = "Currency: " + NumberFormatter.FormatNumber(data.coins);
     }
 }
