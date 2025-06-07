@@ -3,12 +3,27 @@ using TMPro;
 
 public class CounterManager : MonoBehaviour
 {
+    
     public double clickValue = 1;
     [SerializeField] private TMP_Text counterText;
 
     public Upgrade upgrade;
 
     public Data data;
+
+    public static CounterManager Instance { get; private set; }
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
     void Start()
     {
