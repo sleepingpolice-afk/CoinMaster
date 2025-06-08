@@ -1,5 +1,5 @@
 package wesleyfrederickoh.wesleyfrederickohUnity.controller;
-
+import wesleyfrederickoh.wesleyfrederickohUnity.dto.PlayerPublicDTO;
 import wesleyfrederickoh.wesleyfrederickohUnity.model.Player;
 import wesleyfrederickoh.wesleyfrederickohUnity.service.PlayerService;
 import wesleyfrederickoh.wesleyfrederickohUnity.model.LoginRequest;
@@ -8,6 +8,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -35,4 +38,16 @@ public class PlayerController {
                 .orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }
 
+    @GetMapping("/{username}/currency")
+    public ResponseEntity<Map<String, Long>> getCurrency(@PathVariable String username) {
+        return playerService.getCurrencyByUsername(username)
+                .map(currency -> ResponseEntity.ok(Map.of("currency", currency)))
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/random/{excludePlayerId}")
+    public ResponseEntity<List<PlayerPublicDTO>> getRandomPlayers(@PathVariable UUID excludePlayerId) {
+        List<PlayerPublicDTO> randomPlayers = playerService.getRandomPlayers(excludePlayerId);
+        return ResponseEntity.ok(randomPlayers);
+    }
 }

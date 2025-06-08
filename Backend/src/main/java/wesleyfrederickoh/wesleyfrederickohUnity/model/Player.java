@@ -15,7 +15,7 @@ public class Player {
     @Column(name = "PlayerID", updatable = false, nullable = false)
     private UUID playerId;
 
-    private int currency;
+    private long currency;
 
     @Column(name = "created_at", nullable = false, updatable = false, insertable = false)
     private Timestamp createdAt;
@@ -39,11 +39,11 @@ public class Player {
         this.playerId = playerId;
     }
 
-    public int getCurrency() {
+    public long getCurrency() {
         return currency;
     }
 
-    public void setCurrency(int currency) {
+    public void setCurrency(long currency) {
         this.currency = currency;
     }
 

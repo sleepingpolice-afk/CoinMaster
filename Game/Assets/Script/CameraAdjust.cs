@@ -21,17 +21,31 @@ public class CameraAdjust : MonoBehaviour
 
     void UpdateCameraSize()
     {
-        float currentAspect = (float)Screen.width / Screen.height;
+        float targetAspect = referenceAspect;
+        float windowAspect = (float)Screen.width / Screen.height;
+        float scaleHeight = windowAspect / targetAspect;
 
-        if (currentAspect < referenceAspect)
+        Camera mainCam = cam;
+        if (scaleHeight < 1.0f)
         {
-            // Screen is narrower than reference → increase vertical size to maintain horizontal space
-            cam.orthographicSize = referenceOrthographicSize * (referenceAspect / currentAspect);
+            Rect rect = mainCam.rect;
+            rect.width = 1.0f;
+            rect.height = scaleHeight;
+            rect.x = 0;
+            rect.y = (1.0f - scaleHeight) / 2.0f;
+            mainCam.rect = rect;
         }
         else
         {
-            // Screen is wider or equal → keep default vertical size
-            cam.orthographicSize = referenceOrthographicSize;
+            float scaleWidth = 1.0f / scaleHeight;
+            Rect rect = mainCam.rect;
+            rect.width = scaleWidth;
+            rect.height = 1.0f;
+            rect.x = (1.0f - scaleWidth) / 2.0f;
+            rect.y = 0;
+            mainCam.rect = rect;
         }
+
+        mainCam.orthographicSize = referenceOrthographicSize;
     }
 }

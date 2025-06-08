@@ -5,7 +5,7 @@ public class Data
 {
     public event Action OnDataChanged;
 
-    private double _coins;
+    public double _coins;
     public double coins
     {
         get => _coins;
@@ -39,7 +39,7 @@ public class Data
     }
 
 
-    private int _passiveIncomeLevel;
+    public int _passiveIncomeLevel;
     public int passiveIncomeLevel
     {
         get => _passiveIncomeLevel;
@@ -61,7 +61,7 @@ public class Data
         }
     }
 
-    private double _passiveIncomeRate = 0;
+    public double _passiveIncomeRate = 0;
 
     public double passiveIncomeRate
     {
