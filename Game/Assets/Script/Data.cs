@@ -39,6 +39,17 @@ public class Data
     }
 
 
+    public double clickValueBase = 1;
+    public double clickValueMultiplier = 1.15;
+    public double clickValue
+    {
+        get
+        {
+            return clickValueBase * Math.Pow(clickValueMultiplier, clickUpgradeLevel) + clickUpgradeLevel * 3;
+        }
+    }
+
+
     public int _passiveIncomeLevel;
     public int passiveIncomeLevel
     {

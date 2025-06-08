@@ -4,8 +4,6 @@ using System.Collections;
 
 public class ProductionUpgrade : MonoBehaviour
 {
-    public CounterManager counterManager;
-
     public Upgrade upgrade;
 
     // public double productionBaseCost;
@@ -18,21 +16,23 @@ public class ProductionUpgrade : MonoBehaviour
 
     void Start()
     {
-        if (counterManager == null)
-            Debug.LogError("CounterManager is NULL in ProductionUpgrade");
+
         if (upgrade == null)
             Debug.LogError("Upgrade is NULL in ProductionUpgrade");
 
-        // productionBaseCost = 100;
-        // productionCostMultiplier = 1.2f;
-
-        counterManager.data.OnDataChanged += UpdateUI;
+        // Use global DataManager for data reference
+        DataManager.Instance.data.OnDataChanged += UpdateUI;
         UpdateUI();
     }
 
     void Update()
     {
-        counterManager.data.UpdatePassiveIncome();
+        if (DataManager.Instance.data == null)
+        {
+            Debug.LogError("counterManager or DataManager.Instance.data is null in ProductionUpgrade.Update()");
+            return;
+        }
+        DataManager.Instance.data.UpdatePassiveIncome();
 
         if (Input.GetKeyDown(KeyCode.P))
         {
@@ -42,17 +42,17 @@ public class ProductionUpgrade : MonoBehaviour
 
     void OnDestroy()
     {
-        counterManager.data.OnDataChanged -= UpdateUI;
+        DataManager.Instance.data.OnDataChanged -= UpdateUI;
     }
 
     public void BuyProduction()
     {
-        if (counterManager.data.coins >= counterManager.data.productionUpgradeCost)
+        if (DataManager.Instance.data.coins >= DataManager.Instance.data.productionUpgradeCost)
         {
-            counterManager.data.coins -= counterManager.data.productionUpgradeCost;
-            counterManager.data.passiveIncomeLevel++;
-            counterManager.data.passiveIncomeRate += 1 + counterManager.data.passiveIncomeLevel * 0.1;
-            counterManager.data.StartPassiveIncome();
+            DataManager.Instance.data.coins -= DataManager.Instance.data.productionUpgradeCost;
+            DataManager.Instance.data.passiveIncomeLevel++;
+            DataManager.Instance.data.passiveIncomeRate += 1 + DataManager.Instance.data.passiveIncomeLevel * 0.1;
+            DataManager.Instance.data.StartPassiveIncome();
             UpdateUI();
         }
         else
@@ -69,7 +69,7 @@ public class ProductionUpgrade : MonoBehaviour
 
     public double cost()
     {
-        return (double)counterManager.data.productionUpgradeCost;
+        return (double)DataManager.Instance.data.productionUpgradeCost;
     }
 
 
@@ -79,9 +79,9 @@ public class ProductionUpgrade : MonoBehaviour
         {
             buttonText.text = "Production Increase 1\n" +
                                 "Buy Production Upgrade\nCost: " + NumberFormatter.FormatNumber(cost()) +
-                              "\nPassive Income Level: " + counterManager.data.passiveIncomeLevel;
+                              "\nPassive Income Level: " + DataManager.Instance.data.passiveIncomeLevel;
 
-            productionText.text = "\nPassive Income Rate: " + NumberFormatter.FormatNumber(counterManager.data.passiveIncomeRate);
+            productionText.text = "\nPassive Income Rate: " + NumberFormatter.FormatNumber(DataManager.Instance.data.passiveIncomeRate);
 
         }
         else

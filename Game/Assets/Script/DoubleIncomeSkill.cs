@@ -85,8 +85,8 @@ public class DoubleIncomeSkill : MonoBehaviour
         isOnCooldown = true;
         skillButton.interactable = false;
 
-        originalRate = counterManager.data.passiveIncomeRate;
-        counterManager.data.passiveIncomeRate *= 2;
+        originalRate = DataManager.Instance.data.passiveIncomeRate;
+        DataManager.Instance.data.passiveIncomeRate *= 2;
 
         float timer = skillDuration;
         while (timer > 0)
@@ -97,7 +97,7 @@ public class DoubleIncomeSkill : MonoBehaviour
             timer--;
         }
 
-        counterManager.data.passiveIncomeRate = originalRate;
+        DataManager.Instance.data.passiveIncomeRate = originalRate;
 
         SetCooldownAppearance();
 

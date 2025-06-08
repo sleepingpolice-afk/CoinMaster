@@ -8,11 +8,7 @@ public class Upgrade : MonoBehaviour
     public double clickUpgradeBaseCost;
     public double clickUpgradeCostMultiplier;
 
-    public CounterManager counterManager;
-
     public ProductionUpgrade productionUpgrade;
-
-    public Data data;
 
     public TMP_Text buttonText;
     public TMP_Text WarningText;
@@ -21,16 +17,12 @@ public class Upgrade : MonoBehaviour
 
     void Start()
     {
-        if (counterManager == null)
-            Debug.LogError("counterManager is NULL in Upgrade");
+        if (DataManager.Instance == null)
+            Debug.LogError("DataManager is NULL in Upgrade");
+        if (DataManager.Instance.data == null)
+            Debug.LogError("DataManager.Instance.data is NULL in Upgrade");
 
-        if (counterManager.data == null)
-            Debug.LogError("counterManager.data is NULL in Upgrade");
-
-        clickUpgradeBaseCost = 10;
-        clickUpgradeCostMultiplier = 1.5f;
-
-        counterManager.data.OnDataChanged += UpdateUI;
+        DataManager.Instance.data.OnDataChanged += UpdateUI;
 
         WarningText.text = "";
         UpdateUI();
@@ -46,16 +38,15 @@ public class Upgrade : MonoBehaviour
 
     void OnDestroy()
     {
-        counterManager.data.OnDataChanged -= UpdateUI;
+        DataManager.Instance.data.OnDataChanged -= UpdateUI;
     }
 
     public void BuyUpgrade()
     {
-        if (counterManager.data.coins >= cost())
+        if (DataManager.Instance.data.coins >= cost())
         {
-            counterManager.data.coins -= cost();
-            counterManager.data.clickUpgradeLevel++;
-            counterManager.clickValue += counterManager.clickValue * 0.15f + 3;
+            DataManager.Instance.data.coins -= cost();
+            DataManager.Instance.data.clickUpgradeLevel++;
             UpdateUI();
         }
         else
@@ -71,16 +62,16 @@ public class Upgrade : MonoBehaviour
 
     public double cost()
     {
-        return (double)counterManager.data.clickUpgradeCost;
+        return (double)DataManager.Instance.data.clickUpgradeCost;
     }
 
     public void UpdateUI()
     {
         buttonText.text = "Upgrade Click\n" +
                             "Cost: " + NumberFormatter.FormatNumber(cost()) + "\n" +
-                          "Click Level: " + counterManager.data.clickUpgradeLevel + "\n";
+                          "Click Level: " + DataManager.Instance.data.clickUpgradeLevel + "\n";
 
-        upgradeText.text = "Currency per Click: " + NumberFormatter.FormatNumber(counterManager.clickValue) + "\n";
+        upgradeText.text = "Currency per Click: " + NumberFormatter.FormatNumber(DataManager.Instance.data.clickValue) + "\n";
     }
     
     private IEnumerator ShowWarning(string message, float duration)

@@ -9,8 +9,6 @@ public class CounterManager : MonoBehaviour
 
     public Upgrade upgrade;
 
-    public Data data;
-
     public static CounterManager Instance { get; private set; }
 
     private void Awake()
@@ -27,14 +25,19 @@ public class CounterManager : MonoBehaviour
 
     void Start()
     {
-        data = new Data();
-        data.OnDataChanged += UpdateUI;
+        if (DataManager.Instance == null || DataManager.Instance.data == null)
+        {
+            Debug.LogError("DataManager or DataManager.data is null in CounterManager.Start()");
+            return;
+        }
+        DataManager.Instance.data.OnDataChanged += UpdateUI;
         UpdateUI();
     }
 
     void OnDestroy()
     {
-        data.OnDataChanged -= UpdateUI;
+        if (DataManager.Instance.data != null)
+            DataManager.Instance.data.OnDataChanged -= UpdateUI;
     }
 
 
@@ -48,12 +51,12 @@ public class CounterManager : MonoBehaviour
 
     public void IncreaseCounter()
     {
-        data.coins += clickValue;
+        DataManager.Instance.data.coins += clickValue;
         UpdateUI();
     }
 
     private void UpdateUI()
     {
-        counterText.text = "Currency: " + NumberFormatter.FormatNumber(data.coins);
+        counterText.text = "Currency: " + NumberFormatter.FormatNumber(DataManager.Instance.data.coins);
     }
 }

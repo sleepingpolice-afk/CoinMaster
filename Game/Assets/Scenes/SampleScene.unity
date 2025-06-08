@@ -2491,6 +2491,50 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 948022027}
   m_CullTransparentMesh: 1
+--- !u!1 &1015212949
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1015212951}
+  - component: {fileID: 1015212950}
+  m_Layer: 0
+  m_Name: DataManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1015212950
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1015212949}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11ecef7c7c86fcc4ebe29e381542f9b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &1015212951
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1015212949}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1065179492
 GameObject:
   m_ObjectHideFlags: 0
@@ -5142,7 +5186,6 @@ MonoBehaviour:
   upgradeText: {fileID: 423577689}
   clickUpgradeBaseCost: 10
   clickUpgradeCostMultiplier: 2
-  counterManager: {fileID: 1442642834}
   productionUpgrade: {fileID: 2039146338}
   buttonText: {fileID: 1785154928}
   WarningText: {fileID: 1969351815}
@@ -5173,7 +5216,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bdfca3ab88d507347a964f0536222192, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  counterManager: {fileID: 1442642834}
   upgrade: {fileID: 2039146336}
   buttonText: {fileID: 775511870}
   productionText: {fileID: 1522183984}
@@ -5205,7 +5247,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8497e16b33508241bfcaceb7efcd172, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  counterManager: {fileID: 1442642834}
   WarningText: {fileID: 1969351815}
   buttonText: {fileID: 63906856}
 --- !u!1 &2042954859
@@ -5834,3 +5875,4 @@ SceneRoots:
   - {fileID: 611635909}
   - {fileID: 1065179494}
   - {fileID: 1964623360}
+  - {fileID: 1015212951}

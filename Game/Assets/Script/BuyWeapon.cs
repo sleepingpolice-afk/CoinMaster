@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class BuyWeapon : MonoBehaviour
 {
-    public CounterManager counterManager;
     public TMP_Text WarningText;
 
     public TMP_Text buttonText;
@@ -12,18 +11,18 @@ public class BuyWeapon : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        if (counterManager == null)
+        if (DataManager.Instance == null)
         {
-            Debug.LogError("CounterManager is NULL in BuyWeapon");
+            Debug.LogError("DataManager is NULL in BuyWeapon");
             return;
         }
-        else if (counterManager.data == null)
+        else if (DataManager.Instance.data == null)
         {
-            Debug.LogError("CounterManager.data is NULL in BuyWeapon");
+            Debug.LogError("DataManager.data is NULL in BuyWeapon");
             return;
         }
-        
-        counterManager.data.OnDataChanged += UpdateUI;
+
+        DataManager.Instance.data.OnDataChanged += UpdateUI;
         UpdateUI();
     }
 
@@ -37,16 +36,16 @@ public class BuyWeapon : MonoBehaviour
     }
     void OnDestroy()
     {
-        if (counterManager != null && counterManager.data != null)
+        if (DataManager.Instance.data != null)
         {
-            counterManager.data.OnDataChanged -= UpdateUI;
+            DataManager.Instance.data.OnDataChanged -= UpdateUI;
         }
     }
     public void BuyWeapons()
     {
-        if (counterManager.data.coins >= cost())
+        if (DataManager.Instance.data.coins >= cost())
         {
-            counterManager.data.coins -= cost();
+            DataManager.Instance.data.coins -= cost();
             UpdateUI();
         }
         else
@@ -57,7 +56,7 @@ public class BuyWeapon : MonoBehaviour
 
     private double cost()
     {
-        return counterManager.data.weaponCost;
+        return DataManager.Instance.data.weaponCost;
     }
 
     public void UpdateUI()
