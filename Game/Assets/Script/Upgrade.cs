@@ -71,7 +71,7 @@ public class Upgrade : MonoBehaviour
 
     public double cost()
     {
-        return (double)(clickUpgradeBaseCost * Mathf.Pow((float)clickUpgradeCostMultiplier, counterManager.data.clickUpgradeLevel));
+        return (double)counterManager.data.clickUpgradeCost;
     }
 
     public void UpdateUI()

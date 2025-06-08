@@ -22,6 +22,12 @@ public class UpgradePanelController : MonoBehaviour
         OpenPanelWithTab("Production");
     }
 
+    public void ShowWeapon()
+    {
+        currentTab = "Weapon";
+        OpenPanelWithTab("Weapon");
+    }
+
     private void OpenPanelWithTab(string tab)
     {
         if (!panelOpen)

@@ -27,6 +27,18 @@ public class Data
         }
     }
 
+    public double clickUpgradeBaseCost = 10;
+    public double clickUpgradeCostMultiplier = 1.5;
+
+    public double clickUpgradeCost
+    {
+        get
+        {
+            return clickUpgradeBaseCost * Math.Pow(clickUpgradeCostMultiplier, clickUpgradeLevel);
+        }
+    }
+
+
     private int _passiveIncomeLevel;
     public int passiveIncomeLevel
     {
@@ -35,6 +47,17 @@ public class Data
         {
             _passiveIncomeLevel = value;
             OnDataChanged?.Invoke();
+        }
+    }
+
+    public double productionUpgradeBaseCost = 100;
+    public double productionUpgradeCostMultiplier = 1.2;
+
+    public double productionUpgradeCost
+    {
+        get
+        {
+            return productionUpgradeBaseCost * Math.Pow(productionUpgradeCostMultiplier, passiveIncomeLevel);
         }
     }
 
@@ -81,6 +104,18 @@ public class Data
             }
         }
     }
+
+    public double weaponBaseCost = 100;
+    public double weaponCostMultiplier = 2.0;
+
+    public double weaponCost
+    {
+        get
+        {
+            return weaponBaseCost * (clickUpgradeLevel + 1) * (passiveIncomeLevel + 1) * weaponCostMultiplier;
+        }
+    }
+
 
     public Data()
     {

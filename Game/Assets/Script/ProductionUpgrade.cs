@@ -8,8 +8,8 @@ public class ProductionUpgrade : MonoBehaviour
 
     public Upgrade upgrade;
 
-    public double productionBaseCost;
-    public double productionCostMultiplier;
+    // public double productionBaseCost;
+    // public double productionCostMultiplier;
     public TMP_Text buttonText;
     public TMP_Text productionText;
     public TMP_Text WarningText;
@@ -23,8 +23,8 @@ public class ProductionUpgrade : MonoBehaviour
         if (upgrade == null)
             Debug.LogError("Upgrade is NULL in ProductionUpgrade");
 
-        productionBaseCost = 100;
-        productionCostMultiplier = 1.2f;
+        // productionBaseCost = 100;
+        // productionCostMultiplier = 1.2f;
 
         counterManager.data.OnDataChanged += UpdateUI;
         UpdateUI();
@@ -47,9 +47,9 @@ public class ProductionUpgrade : MonoBehaviour
 
     public void BuyProduction()
     {
-        if (counterManager.data.coins >= cost())
+        if (counterManager.data.coins >= counterManager.data.productionUpgradeCost)
         {
-            counterManager.data.coins -= cost();
+            counterManager.data.coins -= counterManager.data.productionUpgradeCost;
             counterManager.data.passiveIncomeLevel++;
             counterManager.data.passiveIncomeRate += 1 + counterManager.data.passiveIncomeLevel * 0.1;
             counterManager.data.StartPassiveIncome();
@@ -66,9 +66,10 @@ public class ProductionUpgrade : MonoBehaviour
         }
     }
 
+
     public double cost()
     {
-        return (double)(productionBaseCost * Mathf.Pow((float)productionCostMultiplier, counterManager.data.passiveIncomeLevel));
+        return (double)counterManager.data.productionUpgradeCost;
     }
 
 

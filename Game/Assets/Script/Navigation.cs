@@ -5,15 +5,16 @@ public class Navigation : MonoBehaviour
 {
     public GameObject ClickUpgradesSelected;
     public GameObject ProductionUpgradesSelected;
+    public GameObject BuyWeaponsSelected;
 
     public TMP_Text ClickUpgradesTitleText;
     public TMP_Text ProductionUpgradesTitleText;
 
     private void Start()
     {
-        if (ClickUpgradesSelected == null || ProductionUpgradesSelected == null)
+        if (ClickUpgradesSelected == null || ProductionUpgradesSelected == null || BuyWeaponsSelected == null)
         {
-            Debug.LogError("Navigation: ClickUpgradesSelected or ProductionUpgradesSelected is NULL");
+            Debug.LogError("Navigation: ClickUpgradesSelected or ProductionUpgradesSelected or BuyWeaponsSelected is NULL");
             return;
         }
 
@@ -26,6 +27,7 @@ public class Navigation : MonoBehaviour
 
         SetActiveWithChildren(ClickUpgradesSelected, isClick, "ClickText");
         SetActiveWithChildren(ProductionUpgradesSelected, !isClick, "ProductionText");
+        SetActiveWithChildren(BuyWeaponsSelected, location == "Weapon");
     }
 
 
