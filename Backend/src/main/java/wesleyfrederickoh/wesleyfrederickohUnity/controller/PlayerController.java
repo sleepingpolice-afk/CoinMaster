@@ -1,13 +1,17 @@
 package wesleyfrederickoh.wesleyfrederickohUnity.controller;
+
+import wesleyfrederickoh.wesleyfrederickohUnity.dto.PlayerDataResponse;
+import wesleyfrederickoh.wesleyfrederickohUnity.dto.PlayerLoginRequest;
 import wesleyfrederickoh.wesleyfrederickohUnity.dto.PlayerPublicDTO;
+import wesleyfrederickoh.wesleyfrederickohUnity.dto.PlayerUpgradeDTO;
 import wesleyfrederickoh.wesleyfrederickohUnity.model.Player;
+import wesleyfrederickoh.wesleyfrederickohUnity.service.PlayerLoginService;
 import wesleyfrederickoh.wesleyfrederickohUnity.service.PlayerService;
-import wesleyfrederickoh.wesleyfrederickohUnity.model.LoginRequest;
+import wesleyfrederickoh.wesleyfrederickohUnity.service.PlayerProgressService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 
 import java.util.List;
 import java.util.Map;
@@ -18,6 +22,12 @@ import java.util.UUID;
 public class PlayerController {
     @Autowired
     private PlayerService playerService;
+
+    @Autowired
+    private PlayerLoginService playerLoginService;
+
+    @Autowired
+    private PlayerProgressService playerProgressService;
 
     @PostMapping
     public ResponseEntity<Player> createPlayer(@RequestBody Player player) {
@@ -32,10 +42,13 @@ public class PlayerController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Player> login(@RequestBody LoginRequest loginRequest) {
-        return playerService.getPlayerByEmailAndPassword(loginRequest.getEmail(), loginRequest.getPassword())
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
+    public ResponseEntity<?> loginPlayer(@RequestBody PlayerLoginRequest loginRequest) {
+        try {
+            PlayerDataResponse playerData = playerLoginService.loginAndGetPlayerData(loginRequest);
+            return ResponseEntity.ok(playerData);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+        }
     }
 
     @GetMapping("/{username}/currency")
@@ -49,5 +62,21 @@ public class PlayerController {
     public ResponseEntity<List<PlayerPublicDTO>> getRandomPlayers(@PathVariable UUID excludePlayerId) {
         List<PlayerPublicDTO> randomPlayers = playerService.getRandomPlayers(excludePlayerId);
         return ResponseEntity.ok(randomPlayers);
+    }
+
+    @GetMapping("/{username}/upgrades")
+    public ResponseEntity<List<PlayerUpgradeDTO>> getPlayerUpgrades(@PathVariable String username) {
+        List<PlayerUpgradeDTO> upgrades = playerService.getUpgradesForPlayer(username);
+        return ResponseEntity.ok(upgrades);
+    }
+
+    @PostMapping("/{playerId}/decrease-upgrades")
+    public ResponseEntity<?> decreasePlayerUpgrades(@PathVariable UUID playerId) {
+        try {
+            playerProgressService.decreasePlayerUpgradeLevels(playerId);
+            return ResponseEntity.ok().body(Map.of("message", "Upgrades decreased successfully for player " + playerId));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", e.getMessage()));
+        }
     }
 }

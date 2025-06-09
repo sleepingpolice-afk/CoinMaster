@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Networking;
 using System.Collections;
+using UnityEngine.SceneManagement; // Added for scene management
 
 public class RegisterLogin : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class RegisterLogin : MonoBehaviour
     public TMP_InputField password;
     public TMP_InputField email;
     public Button registerButton;
+    public Button goToLoginButton; // Added for navigating to Login scene
 
     private string registerUrl = "http://localhost:8080/api/players";
 
@@ -19,6 +21,15 @@ public class RegisterLogin : MonoBehaviour
         {
             StartCoroutine(Register());
         });
+
+        if (goToLoginButton != null) // Added null check
+        {
+            goToLoginButton.onClick.AddListener(GoToLoginScene);
+        }
+        else
+        {
+            Debug.LogError("GoToLoginButton is not assigned in RegisterLogin script.");
+        }
     }
 
     IEnumerator Register()
@@ -41,13 +52,18 @@ public class RegisterLogin : MonoBehaviour
 
         if (request.result == UnityWebRequest.Result.Success)
         {
-            Debug.Log("✅ Registration successful: " + request.downloadHandler.text);
+            Debug.Log("Registration successful: " + request.downloadHandler.text);
+            SceneManager.LoadScene("LOGIN"); 
         }
         else
         {
-            Debug.LogError("❌ Registration failed: " + request.responseCode + " " + request.error);
+            Debug.LogError("Registration failed: " + request.responseCode + " " + request.error);
             Debug.LogError("Response: " + request.downloadHandler.text);
         }
+    }
+    public void GoToLoginScene()
+    {
+        SceneManager.LoadScene("LOGIN");
     }
 }
 

@@ -36,7 +36,6 @@ public class DoubleClick : MonoBehaviour
         cooldownText.text = "";
         skillButton.onClick.AddListener(ActivateSkill);
 
-        // Initially hide the skill button
         skillButton.gameObject.SetActive(false);
 
         buttonImage = skillButton.GetComponent<Image>();
@@ -52,12 +51,10 @@ public class DoubleClick : MonoBehaviour
         if (cooldownText != null)
             originalTextColor = cooldownText.color;
 
-        // Subscribe to EventManager unlock events
         if (EventManager.Instance != null)
         {
             EventManager.Instance.OnUnlocked += HandleUnlock;
 
-            // Check if already unlocked
             if (EventManager.Instance.IsUnlocked(unlockKey))
                 UnlockSkill();
         }
@@ -97,11 +94,10 @@ public class DoubleClick : MonoBehaviour
 
         skillButton.interactable = false;
 
-        originalClickValue = counterManager.clickValue;
-        counterManager.clickValue *= 2;
+        DataManager.Instance.data.clickValueBonusMultiplier = 2.0;
+        upgrade.UpdateUI();
 
         double timer = skillDuration;
-        upgrade.UpdateUI();
         while (timer > 0)
         {
             cooldownText.color = Color.green;
@@ -110,7 +106,8 @@ public class DoubleClick : MonoBehaviour
             timer--;
         }
 
-        counterManager.clickValue = originalClickValue;
+        DataManager.Instance.data.clickValueBonusMultiplier = 1.0;
+        upgrade.UpdateUI();
         SetCooldownAppearance();
 
         timer = cooldownDuration;

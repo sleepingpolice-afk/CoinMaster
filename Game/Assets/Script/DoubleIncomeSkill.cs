@@ -17,7 +17,6 @@ public class DoubleIncomeSkill : MonoBehaviour
     public string unlockKey;
 
     private bool isOnCooldown = false;
-    private double originalRate;
 
     private Image buttonImage;
 
@@ -85,8 +84,7 @@ public class DoubleIncomeSkill : MonoBehaviour
         isOnCooldown = true;
         skillButton.interactable = false;
 
-        originalRate = DataManager.Instance.data.passiveIncomeRate;
-        DataManager.Instance.data.passiveIncomeRate *= 2;
+        DataManager.Instance.data.passiveIncomeSkillMultiplier = 2.0; // Set multiplier
 
         float timer = skillDuration;
         while (timer > 0)
@@ -97,7 +95,7 @@ public class DoubleIncomeSkill : MonoBehaviour
             timer--;
         }
 
-        DataManager.Instance.data.passiveIncomeRate = originalRate;
+        DataManager.Instance.data.passiveIncomeSkillMultiplier = 1.0; // Reset multiplier
 
         SetCooldownAppearance();
 

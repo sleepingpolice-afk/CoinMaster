@@ -5,9 +5,6 @@ using System.Collections;
 public class ProductionUpgrade : MonoBehaviour
 {
     public Upgrade upgrade;
-
-    // public double productionBaseCost;
-    // public double productionCostMultiplier;
     public TMP_Text buttonText;
     public TMP_Text productionText;
     public TMP_Text WarningText;
@@ -20,8 +17,10 @@ public class ProductionUpgrade : MonoBehaviour
         if (upgrade == null)
             Debug.LogError("Upgrade is NULL in ProductionUpgrade");
 
-        // Use global DataManager for data reference
-        DataManager.Instance.data.OnDataChanged += UpdateUI;
+        if (DataManager.Instance != null && DataManager.Instance.data != null)
+        {
+            DataManager.Instance.data.OnDataChanged += UpdateUI;
+        }
         UpdateUI();
     }
 
@@ -29,7 +28,6 @@ public class ProductionUpgrade : MonoBehaviour
     {
         if (DataManager.Instance.data == null)
         {
-            Debug.LogError("counterManager or DataManager.Instance.data is null in ProductionUpgrade.Update()");
             return;
         }
         DataManager.Instance.data.UpdatePassiveIncome();
@@ -42,7 +40,10 @@ public class ProductionUpgrade : MonoBehaviour
 
     void OnDestroy()
     {
-        DataManager.Instance.data.OnDataChanged -= UpdateUI;
+        if (DataManager.Instance != null && DataManager.Instance.data != null)
+        {
+            DataManager.Instance.data.OnDataChanged -= UpdateUI;
+        }
     }
 
     public void BuyProduction()
@@ -51,9 +52,7 @@ public class ProductionUpgrade : MonoBehaviour
         {
             DataManager.Instance.data.coins -= DataManager.Instance.data.productionUpgradeCost;
             DataManager.Instance.data.passiveIncomeLevel++;
-            DataManager.Instance.data.passiveIncomeRate += 1 + DataManager.Instance.data.passiveIncomeLevel * 0.1;
-            DataManager.Instance.data.StartPassiveIncome();
-            UpdateUI();
+            DataManager.Instance.data.StartPassiveIncome(); // Restart coroutine
         }
         else
         {
@@ -75,14 +74,14 @@ public class ProductionUpgrade : MonoBehaviour
 
     public void UpdateUI()
     {
-        if (buttonText != null)
+        if (buttonText != null && DataManager.Instance != null && DataManager.Instance.data != null) // Added null checks for DataManager
         {
             buttonText.text = "Production Increase 1\n" +
                                 "Buy Production Upgrade\nCost: " + NumberFormatter.FormatNumber(cost()) +
                               "\nPassive Income Level: " + DataManager.Instance.data.passiveIncomeLevel;
 
-            productionText.text = "\nPassive Income Rate: " + NumberFormatter.FormatNumber(DataManager.Instance.data.passiveIncomeRate);
-
+            // Use the new PassiveIncomeRate property (assuming it will be named with a capital P in Data.cs)
+            productionText.text = "\nPassive Income Rate: " + NumberFormatter.FormatNumber(DataManager.Instance.data.passiveIncomeRate); 
         }
         else
         {

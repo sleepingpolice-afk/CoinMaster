@@ -4,7 +4,6 @@ using TMPro;
 public class CounterManager : MonoBehaviour
 {
     
-    public double clickValue = 1;
     [SerializeField] private TMP_Text counterText;
 
     public Upgrade upgrade;
@@ -51,7 +50,7 @@ public class CounterManager : MonoBehaviour
 
     public void IncreaseCounter()
     {
-        DataManager.Instance.data.coins += clickValue;
+        DataManager.Instance.data.coins += DataManager.Instance.data.clickValue;
         UpdateUI();
     }
 

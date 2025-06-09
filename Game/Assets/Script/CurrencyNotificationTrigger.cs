@@ -8,16 +8,9 @@ public class CurrencyNotificationTrigger : MonoBehaviour
 
         manager.RegisterNotification(new ConditionalNotification(
             "Congratulations!",
-            "You have collected 500 coins! Keep it up!",
-            () => CounterManagerInstanceExists() && DataManager.Instance.data.coins > 500,
-            () => Debug.Log("Player acknowledged 500 coins milestone.")
-        ));
-
-        manager.RegisterNotification(new ConditionalNotification(
-            "Congratulations!",
-            "You have collected 100 coins! Keep it up!",
-            () => CounterManagerInstanceExists() && DataManager.Instance.data.coins > 100,
-            () => Debug.Log("Player acknowledged 100 coins milestone.")
+            "You Have bought a weapon! Select a player to attack with this weapon. Click Cancel to cancel purchase.",
+            () => CounterManagerInstanceExists() && DataManager.Instance.data.hasBoughtWeapon == true,
+            () => Debug.Log("Player acknowledged weapon purchase.")
         ));
     }
 

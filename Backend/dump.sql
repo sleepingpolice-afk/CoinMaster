@@ -2,7 +2,7 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 CREATE TABLE Player (
     PlayerID UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    Currency INT NOT NULL DEFAULT 0,
+    Currency BIGINT NOT NULL DEFAULT 0,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     Username VARCHAR(255) NOT NULL UNIQUE,
     Password VARCHAR(255) NOT NULL,
@@ -53,42 +53,48 @@ CREATE TABLE attack_log(
 );
 
 INSERT INTO Upgrades (Name, base_cost, cost_mult, description) VALUES
-('Double Production', 100, 2, 'Doubles production for 5 seconds. Cooldown 5 seconds.'),
-('Double Click Power', 10, 1.5, 'Doubles click power temporarily.');
-
+('Production', 100, 2, 'Increase Production Value'),
+('Click', 10, 1.5, 'Increase Click Value');
 
 INSERT INTO Skill (Name, duration, cooldown, description) VALUES
-('Skill 1', 10.0, 5.0, 'Description for Skill 1');
+('DoubleProduction', 10.0, 5.0, 'Doubles production for 5 seconds. Cooldown 5 seconds.'),
+('DoubleClick', 10.0, 5.0, 'Doubles click value for 5 seconds. Cooldown 5 seconds.');
 
 INSERT INTO Weapon (Name, cost, description) VALUES
 ('Weapon 1', 200, 'Description for Weapon 1');
 
-INSERT INTO Player (Username, Password, Email) VALUES
-('player1', 'password1', 'player1@example.com'),
-('player2', 'password2', 'player2@example.com'),
-('player3', 'password3', 'player3@example.com');
+INSERT INTO Player (Currency, Username, Password, Email) VALUES
+(100, 'player1', 'password1', 'player1@example.com'),
+(200, 'player2', 'password2', 'player2@example.com'),
+(300, 'player3', 'password3', 'player3@example.com');
 
 INSERT INTO player_upgrades (PlayerID, UpgradeID, Level) VALUES
 ((SELECT PlayerID FROM Player WHERE Username = 'player1'),
- (SELECT UpgradeID FROM Upgrades WHERE Name = 'Double Click Power'), 1),
+ (SELECT UpgradeID FROM Upgrades WHERE Name = 'Click'), 1),
 ((SELECT PlayerID FROM Player WHERE Username = 'player2'),
- (SELECT UpgradeID FROM Upgrades WHERE Name = 'Double Click Power'), 1),
+ (SELECT UpgradeID FROM Upgrades WHERE Name = 'Click'), 1),
 ((SELECT PlayerID FROM Player WHERE Username = 'player3'),
- (SELECT UpgradeID FROM Upgrades WHERE Name = 'Double Click Power'), 1),
+ (SELECT UpgradeID FROM Upgrades WHERE Name = 'Click'), 1),
 ((SELECT PlayerID FROM Player WHERE Username = 'player1'),
- (SELECT UpgradeID FROM Upgrades WHERE Name = 'Double Production'), 1),
+ (SELECT UpgradeID FROM Upgrades WHERE Name = 'Production'), 1),
 ((SELECT PlayerID FROM Player WHERE Username = 'player2'),
- (SELECT UpgradeID FROM Upgrades WHERE Name = 'Double Production'), 1),
+ (SELECT UpgradeID FROM Upgrades WHERE Name = 'Production'), 1),
 ((SELECT PlayerID FROM Player WHERE Username = 'player3'),
- (SELECT UpgradeID FROM Upgrades WHERE Name = 'Double Production'), 1);
+ (SELECT UpgradeID FROM Upgrades WHERE Name = 'Production'), 1);
 
 INSERT INTO player_skills (PlayerID, SkillID) VALUES
 ((SELECT PlayerID FROM Player WHERE Username = 'player1'),
- (SELECT SkillID FROM Skill WHERE Name = 'Skill 1')),
+ (SELECT SkillID FROM Skill WHERE Name = 'DoubleClick')),
+((SELECT PlayerID FROM Player WHERE Username = 'player1'),
+ (SELECT SkillID FROM Skill WHERE Name = 'DoubleProduction')),
 ((SELECT PlayerID FROM Player WHERE Username = 'player2'),
- (SELECT SkillID FROM Skill WHERE Name = 'Skill 1')),
+ (SELECT SkillID FROM Skill WHERE Name = 'DoubleClick')),
+((SELECT PlayerID FROM Player WHERE Username = 'player2'),
+ (SELECT SkillID FROM Skill WHERE Name = 'DoubleProduction')),
 ((SELECT PlayerID FROM Player WHERE Username = 'player3'),
- (SELECT SkillID FROM Skill WHERE Name = 'Skill 1'));
+ (SELECT SkillID FROM Skill WHERE Name = 'DoubleClick')),
+((SELECT PlayerID FROM Player WHERE Username = 'player3'),
+ (SELECT SkillID FROM Skill WHERE Name = 'DoubleProduction'));
 
 INSERT INTO attack_log (AttackerID, DefenderID) VALUES
 ((SELECT PlayerID FROM Player WHERE Username = 'player1'),

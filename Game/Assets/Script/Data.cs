@@ -3,7 +3,12 @@ using UnityEngine;
 
 public class Data
 {
+    public bool hasBoughtWeapon;
     public event Action OnDataChanged;
+
+    public string playerId; 
+    public string username; 
+    public string email;    
 
     public double _coins;
     public double coins
@@ -41,23 +46,23 @@ public class Data
 
     public double clickValueBase = 1;
     public double clickValueMultiplier = 1.15;
+    public double clickValueBonusMultiplier = 1.0;
     public double clickValue
     {
         get
         {
-            return clickValueBase * Math.Pow(clickValueMultiplier, clickUpgradeLevel) + clickUpgradeLevel * 3;
+            return (clickValueBase * Math.Pow(clickValueMultiplier, clickUpgradeLevel) + clickUpgradeLevel * 3) * clickValueBonusMultiplier;
         }
     }
 
-
-    public int _passiveIncomeLevel;
+    private int _passiveIncomeLevel;
     public int passiveIncomeLevel
     {
         get => _passiveIncomeLevel;
         set
         {
             _passiveIncomeLevel = value;
-            OnDataChanged?.Invoke();
+            OnDataChanged?.Invoke(); 
         }
     }
 
@@ -72,17 +77,25 @@ public class Data
         }
     }
 
-    public double _passiveIncomeRate = 0;
+    private const double BasePassiveIncomeAtLevelZero = 1.0;
+    private const double PassiveIncomeIncreaseFactorPerLevel = 1.10;
+
+    private double _passiveIncomeSkillMultiplier = 1.0;
+    public double passiveIncomeSkillMultiplier 
+    {
+        get => _passiveIncomeSkillMultiplier;
+        set
+        {
+            _passiveIncomeSkillMultiplier = value;
+            OnDataChanged?.Invoke();
+        }
+    }
 
     public double passiveIncomeRate
     {
-        get => _passiveIncomeRate;
-        set
+        get
         {
-            if (value < 0)
-                throw new ArgumentOutOfRangeException(nameof(value), "Passive income rate cannot be negative.");
-            _passiveIncomeRate = value;
-            OnDataChanged?.Invoke();
+            return (BasePassiveIncomeAtLevelZero * Math.Pow(PassiveIncomeIncreaseFactorPerLevel, _passiveIncomeLevel)) * _passiveIncomeSkillMultiplier;
         }
     }
 
@@ -105,13 +118,17 @@ public class Data
 
     public void UpdatePassiveIncome()
     {
-        if (_isPassiveIncomeActive && _passiveIncomeRate > 0)
+        // Use the calculated passiveIncomeRate property here
+        if (_isPassiveIncomeActive && passiveIncomeRate > 0)
         {
             float currentTime = Time.time;
-            if (currentTime - _lastPassiveIncomeTime >= 1.0f)
+            // Grant income for every full second passed
+            float elapsedSeconds = currentTime - _lastPassiveIncomeTime;
+            if (elapsedSeconds >= 1.0f)
             {
-                coins += _passiveIncomeRate;
-                _lastPassiveIncomeTime = currentTime;
+                int secondsPassed = (int)elapsedSeconds;
+                coins += passiveIncomeRate * secondsPassed;
+                _lastPassiveIncomeTime += secondsPassed;
             }
         }
     }
@@ -133,5 +150,8 @@ public class Data
         _coins = 0;
         _clickUpgradeLevel = 0;
         _passiveIncomeLevel = 0;
+        _passiveIncomeSkillMultiplier = 1.0;
+        username = "";
+        email = "";
     }
 }
