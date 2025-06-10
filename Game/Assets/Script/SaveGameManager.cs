@@ -3,6 +3,7 @@ using UnityEngine.Networking;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class SaveGameManager : MonoBehaviour
 {
@@ -26,6 +27,21 @@ public class SaveGameManager : MonoBehaviour
             Debug.LogError("SaveGameManager: DataManager or DataManager.data is null. Cannot save progress.");
             if (feedbackText != null) feedbackText.text = "Error: Player data not found!";
         }
+    }
+
+    public void LogOut()
+    {
+        if (DataManager.Instance != null && DataManager.Instance.data != null)
+        {
+            DataManager.Instance.data.playerId = null;
+            DataManager.Instance.data.username = null;
+        }
+        else
+        {
+            Debug.LogWarning("DataManager instance or data not found. Could not clear session data.");
+        }
+        
+        SceneManager.LoadScene("LOGIN");
     }
 
     private IEnumerator SavePlayerProgress()

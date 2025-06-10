@@ -2,11 +2,13 @@ package wesleyfrederickoh.wesleyfrederickohUnity.service;
 
 import wesleyfrederickoh.wesleyfrederickohUnity.dto.PlayerPublicDTO;
 import wesleyfrederickoh.wesleyfrederickohUnity.dto.PlayerUpgradeDTO;
+import wesleyfrederickoh.wesleyfrederickohUnity.model.AttackLog;
 import wesleyfrederickoh.wesleyfrederickohUnity.model.Player;
 import wesleyfrederickoh.wesleyfrederickohUnity.model.PlayerSkill;
 import wesleyfrederickoh.wesleyfrederickohUnity.model.PlayerUpgrade;
 import wesleyfrederickoh.wesleyfrederickohUnity.model.Skill;
 import wesleyfrederickoh.wesleyfrederickohUnity.model.UpgradeType;
+import wesleyfrederickoh.wesleyfrederickohUnity.repository.AttackLogRepository;
 import wesleyfrederickoh.wesleyfrederickohUnity.repository.PlayerRepository;
 import wesleyfrederickoh.wesleyfrederickohUnity.repository.PlayerSkillRepository;
 import wesleyfrederickoh.wesleyfrederickohUnity.repository.PlayerUpgradeRepository;
@@ -38,6 +40,9 @@ public class PlayerService {
 
     @Autowired
     private PlayerSkillRepository playerSkillRepository;
+
+    @Autowired
+    private AttackLogRepository attackLogRepository;
 
     @Transactional
     public Player createPlayer(Player player) {
@@ -80,6 +85,38 @@ public class PlayerService {
 
     public Optional<Long> getCurrencyByUsername(String username) {
         return playerRepository.findByUsername(username).map(Player::getCurrency);
+    }
+
+    @Transactional
+    public boolean decreasePlayerUpgrades(UUID attackerId, UUID defenderId) {
+        Optional<Player> attackerOpt = playerRepository.findById(attackerId);
+        Optional<Player> defenderOpt = playerRepository.findById(defenderId);
+
+        if (attackerOpt.isPresent() && defenderOpt.isPresent()) {
+            Player attacker = attackerOpt.get();
+            Player defender = defenderOpt.get();
+
+            List<PlayerUpgrade> defenderUpgrades = playerUpgradeRepository.findAllByPlayer(defender);
+            if (defenderUpgrades.isEmpty()) {
+                return false; 
+            }
+
+            for (PlayerUpgrade upgrade : defenderUpgrades) {
+                if (upgrade.getLevel() > 0) {
+                    upgrade.setLevel(upgrade.getLevel() - 1);
+                    playerUpgradeRepository.save(upgrade);
+                }
+            }
+            logAttack(attacker, defender);
+            return true;
+        }
+        return false;
+    }
+
+    @Transactional
+    public void logAttack(Player attacker, Player defender) {
+        AttackLog attackLog = new AttackLog(attacker, defender);
+        attackLogRepository.save(attackLog);
     }
 
     public List<PlayerPublicDTO> getRandomPlayers(UUID excludePlayerId) {

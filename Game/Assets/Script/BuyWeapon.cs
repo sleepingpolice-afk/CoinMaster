@@ -17,7 +17,7 @@ public class BuyWeapon : MonoBehaviour
     public Transform[] playerButtonAnchors = new Transform[6];
 
     private string randomPlayersUrl = "http://localhost:8080/api/players/random";
-    private string decreaseUpgradesUrl = "http://localhost:8080/api/players";
+    private string playerActionsBaseUrl = "http://localhost:8080/api/players";
     private double pendingWeaponCost;
 
     // Helper class to parse player data from JSON
@@ -341,7 +341,8 @@ public class BuyWeapon : MonoBehaviour
     {
         StartCoroutine(ShowWarning($"Attacking {username}...", 2f));
 
-        string url = $"{decreaseUpgradesUrl}/{playerId}/decrease-upgrades";
+        string attackerPlayerId = DataManager.Instance.data.playerId; //ini id user
+        string url = $"{playerActionsBaseUrl}/{attackerPlayerId}/attack/{playerId}"; // Use renamed variable
         UnityWebRequest request = UnityWebRequest.Post(url, new WWWForm()); 
         request.SetRequestHeader("Content-Type", "application/json");
 

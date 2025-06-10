@@ -79,4 +79,13 @@ public class PlayerController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", e.getMessage()));
         }
     }
+
+    @PostMapping("/{attackerId}/attack/{defenderId}")
+    public ResponseEntity<?> attackPlayer(@PathVariable UUID attackerId, @PathVariable UUID defenderId) {
+        boolean success = playerService.decreasePlayerUpgrades(attackerId, defenderId);
+        if (success) {
+            return ResponseEntity.ok().body(Map.of("message", "Attack successful. Defender's upgrades decreased."));
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", "Player not found or no upgrades to decrease."));
+    }
 }
