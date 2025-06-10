@@ -16,8 +16,8 @@ public class BuyWeapon : MonoBehaviour
     public GameObject cancelButtonPrefab;
     public Transform[] playerButtonAnchors = new Transform[6];
 
-    private string randomPlayersUrl = "http://localhost:8080/api/players/random";
-    private string playerActionsBaseUrl = "http://localhost:8080/api/players";
+    private string randomPlayersUrl = "https://coinmaster.osc-fr1.scalingo.io/api/players/random";
+    private string playerActionsBaseUrl = "https://coinmaster.osc-fr1.scalingo.io/api/players";
     private double pendingWeaponCost;
 
     // Helper class to parse player data from JSON

@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 
 public class SaveGameManager : MonoBehaviour
 {
-    private string saveUrl = "http://localhost:8080/api/player-progress/save";
+    private string saveUrl = "https://coinmaster.osc-fr1.scalingo.io/api/player-progress/save";
     public TextMeshProUGUI feedbackText;
 
     public void OnSaveButtonPressed()

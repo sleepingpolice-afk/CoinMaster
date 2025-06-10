@@ -13,7 +13,7 @@ public class RegisterLogin : MonoBehaviour
     public Button registerButton;
     public Button goToLoginButton; // Added for navigating to Login scene
 
-    private string registerUrl = "http://localhost:8080/api/players";
+    private string registerUrl = "https://coinmaster.osc-fr1.scalingo.io/api/players";
 
     void Start()
     {

@@ -13,7 +13,7 @@ public class Login : MonoBehaviour
     public Button submitbutton;
     public Button goToRegisterButton; // Added for navigating to Register scene
 
-    private string loginurl = "http://localhost:8080/api/players/login";
+    private string loginurl = "https://coinmaster.osc-fr1.scalingo.io/api/players/login";
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
