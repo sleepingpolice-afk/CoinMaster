@@ -2886,6 +2886,7 @@ GameObject:
   - component: {fileID: 1137445203}
   - component: {fileID: 1137445206}
   - component: {fileID: 1137445207}
+  - component: {fileID: 1137445208}
   m_Layer: 5
   m_Name: Coin
   m_TagString: Untagged
@@ -3095,6 +3096,20 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1137445208
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1137445201}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 22f1c54f11e3443469bb155f0e90e6a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scaleFactor: 1.2
+  duration: 0.15
 --- !u!1 &1186107066
 GameObject:
   m_ObjectHideFlags: 0
