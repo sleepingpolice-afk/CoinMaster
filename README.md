@@ -87,6 +87,10 @@ Akses game saya di **Itch.io**: https://wf-835.itch.io/coinmaster-beta
 
     ![picture 8](https://i.imgur.com/5T99M5U.png)  
 
+- Flowchart
+
+    ![picture 9](https://i.imgur.com/XeO9LC4.png)  
+
 ## Credits
 **Wesley Frederick Oh**
 
